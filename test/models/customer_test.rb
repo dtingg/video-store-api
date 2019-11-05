@@ -50,5 +50,12 @@ describe Customer do
       expect(customer.rentals.count).must_equal 1
       expect(customer.rentals.first).must_be_instance_of Rental
     end
-  end
+    
+    it "can have a movie through a rental" do
+      new_rental = Rental.create(customer: customer, movie: movie)
+      
+      expect(customer.movies.count).must_equal 1
+      expect(customer.movies.first).must_be_instance_of Movie
+    end
+  end  
 end
