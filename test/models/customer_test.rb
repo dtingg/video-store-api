@@ -40,4 +40,15 @@ describe Customer do
       expect(customer.errors.messages[:phone]).must_equal ["can't be blank"]
     end
   end
+  
+  describe "relationships" do
+    let(:customer) { customers(:customer_one)}
+    let(:movie) { movies(:matrix)}
+    it "can have many rentals" do
+      new_rental = Rental.create(customer: customer, movie: movie)
+      
+      expect(customer.rentals.count).must_equal 1
+      expect(customer.rentals.first).must_be_instance_of Rental
+    end
+  end
 end

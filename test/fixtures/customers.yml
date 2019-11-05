@@ -1,0 +1,6 @@
+customer_one:
+  name: Fred Flintstone
+  registered_at: May 1, 2019
+  postal_code: 98104
+  phone: 1234567890
+  
