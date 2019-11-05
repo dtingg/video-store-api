@@ -1,7 +1,26 @@
 require "test_helper"
 
 describe Customer do
-  # it "does a thing" do
-  #   value(1+1).must_equal 2
-  # end
+  describe "validations" do
+    
+    it "is valid for a customer with a name, registered_at, postal_code, and phone" do
+      
+    end
+    
+    it "is invalid for a customer without a name" do
+      
+    end
+    
+    it "is invalid for a customer without a registered_at" do
+      
+    end
+    
+    it "is invalid for a customer without a postal_code" do
+      
+    end
+    
+    it "is invalid for a customer without a phone" do
+      
+    end
+  end
 end
