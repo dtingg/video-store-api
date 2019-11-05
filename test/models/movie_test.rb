@@ -1,7 +1,6 @@
 require "test_helper"
 
 describe Movie do
-  
   describe "validations" do
     it "is valid for a movie with a title, release_date, overview, and inventory" do
       movie = Movie.new(title: "The Ada Escape", release_date: Date.today, overview: "A thrilling caper", inventory: 12)
@@ -36,4 +35,24 @@ describe Movie do
       expect(movie.errors.messages[:inventory]).must_equal ["can't be blank"]
     end
   end
+  
+  describe "relationships" do
+    let(:customer) { customers(:customer_one)}
+    let(:movie) { movies(:matrix)}
+    it "can have many rentals" do
+      new_rental = Rental.create(customer: customer, movie: movie)
+      
+      expect(movie.rentals.count).must_equal 1
+      expect(movie.rentals.first).must_be_instance_of Rental
+    end
+    
+    it "can have a customer through a rental" do
+      new_rental = Rental.create(customer: customer, movie: movie)
+      
+      expect(movie.customers.count).must_equal 1
+      expect(movie.customers.first).must_be_instance_of Customer
+    end
+  end  
+  
 end
+
