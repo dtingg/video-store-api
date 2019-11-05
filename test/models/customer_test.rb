@@ -17,15 +17,27 @@ describe Customer do
     end
     
     it "is invalid for a customer without a registered_at" do
+      customer = Customer.new(name: "Fred Flintstone", registered_at: nil, postal_code: "98104", phone: "1234567890")
       
+      expect(customer.valid?).must_equal false
+      expect(customer.errors.messages).must_include :registered_at
+      expect(customer.errors.messages[:registered_at]).must_equal ["can't be blank"]
     end
     
     it "is invalid for a customer without a postal_code" do
+      customer = Customer.new(name: "Fred Flintstone", registered_at: DateTime.now, postal_code: nil, phone: "1234567890")
       
+      expect(customer.valid?).must_equal false
+      expect(customer.errors.messages).must_include :postal_code
+      expect(customer.errors.messages[:postal_code]).must_equal ["can't be blank"]
     end
     
     it "is invalid for a customer without a phone" do
+      customer = Customer.new(name: "Fred Flintstone", registered_at: DateTime.now, postal_code: "98104", phone: nil)
       
+      expect(customer.valid?).must_equal false
+      expect(customer.errors.messages).must_include :phone
+      expect(customer.errors.messages[:phone]).must_equal ["can't be blank"]
     end
   end
 end
