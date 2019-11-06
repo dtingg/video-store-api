@@ -32,10 +32,22 @@ describe MoviesController do
   end
   
   describe "show" do
-    it "responds with success for a valid movie" do
+    it "responds with success and gives back one hash for a valid movie" do
+      movie = movies(:matrix)
+      
+      get movie_path(movie)
+      
+      body = check_response(expected_type: Hash)
+      
+      expect(body.keys.sort).must_equal ["available_inventory", "inventory", "overview", "release_date", "title" ]
     end
     
-    it "responds with bad_request for an invalid movie" do
+    it "responds with not_found and gives back an error message for an invalid movie" do
+      get movie_path(-1)
+      
+      body = check_response(expected_type: Hash, expected_status: :not_found)
+      
+      expect(body.keys).must_include "errors"
     end
   end
 end
