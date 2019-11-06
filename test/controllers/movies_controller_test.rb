@@ -52,7 +52,6 @@ describe MoviesController do
   end
   
   describe "create" do
-    
     before do
       @movie_hash = {
       title: "Twilight",
