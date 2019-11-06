@@ -39,7 +39,7 @@ describe Movie do
   describe "relationships" do
     let(:customer) { customers(:customer_one) }
     let(:movie) { movies(:matrix) }
-    it "can have many rentals" do
+    it "can have a rental" do
       new_rental = Rental.create(customer: customer, movie: movie)
       
       expect(movie.rentals.count).must_equal 1

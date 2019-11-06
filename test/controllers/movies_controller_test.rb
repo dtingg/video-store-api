@@ -34,4 +34,12 @@ describe MoviesController do
       must_respond_with :ok
     end
   end
+  
+  describe "show" do
+    it "responds with success for a valid movie" do
+    end
+    
+    it "responds with not_found for an invalid movie" do
+    end
+  end
 end

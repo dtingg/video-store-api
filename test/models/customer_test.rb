@@ -2,8 +2,8 @@ require "test_helper"
 
 describe Customer do
   describe "validations" do
-    it "is valid for a customer with a name, registered_at, postal_code, phone, and movies_checked_out_count" do
-      customer = Customer.new(name: "Fred Flintstone", registered_at: DateTime.now, postal_code: "98104", phone: "1234567890", movies_checked_out_count: 0)
+    it "is valid for a customer with a name, registered_at, postal_code, and phone" do
+      customer = Customer.new(name: "Fred Flintstone", registered_at: DateTime.now, postal_code: "98104", phone: "1234567890")
       
       expect(customer.valid?).must_equal true
     end
@@ -51,7 +51,7 @@ describe Customer do
   describe "relationships" do
     let(:customer) { customers(:customer_one)}
     let(:movie) { movies(:matrix)}
-    it "can have many rentals" do
+    it "can have a rental" do
       new_rental = Rental.create(customer: customer, movie: movie)
       
       expect(customer.rentals.count).must_equal 1
