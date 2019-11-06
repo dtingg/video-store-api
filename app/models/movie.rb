@@ -6,4 +6,8 @@ class Movie < ApplicationRecord
   
   has_many :rentals
   has_many :customers, through: :rentals
+  
+  def find_available_inventory
+    self.available_inventory = self.inventory
+  end
 end

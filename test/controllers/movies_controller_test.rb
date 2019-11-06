@@ -98,6 +98,5 @@ describe MoviesController do
       body = check_response(expected_type: Hash, expected_status: :bad_request)
       expect(body['errors'].keys).must_include 'inventory'
     end
-    
   end
 end
