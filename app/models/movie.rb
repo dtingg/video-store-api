@@ -8,6 +8,6 @@ class Movie < ApplicationRecord
   has_many :customers, through: :rentals
   
   def find_available_inventory
-    self.available_inventory = self.inventory
+    return self.inventory
   end
 end
