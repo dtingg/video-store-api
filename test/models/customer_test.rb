@@ -2,8 +2,8 @@ require "test_helper"
 
 describe Customer do
   describe "validations" do
-    it "is valid for a customer with a name, registered_at, postal_code, and phone" do
-      customer = Customer.new(name: "Fred Flintstone", registered_at: DateTime.now, postal_code: "98104", phone: "1234567890")
+    it "is valid for a customer with a name, registered_at, postal_code, phone, and movies_checked_out_count" do
+      customer = Customer.new(name: "Fred Flintstone", registered_at: DateTime.now, postal_code: "98104", phone: "1234567890", movies_checked_out_count: 0)
       
       expect(customer.valid?).must_equal true
     end
@@ -38,6 +38,13 @@ describe Customer do
       expect(customer.valid?).must_equal false
       expect(customer.errors.messages).must_include :phone
       expect(customer.errors.messages[:phone]).must_equal ["can't be blank"]
+    end
+    
+    it "gets a default value of 0 for movies_checked_out_count" do
+      customer = Customer.new(name: "Fred Flintstone", registered_at: DateTime.now, postal_code: "98104", phone: "1234567890")
+      
+      expect(customer.valid?).must_equal true
+      expect(customer.movies_checked_out_count).must_equal 0
     end
   end
   

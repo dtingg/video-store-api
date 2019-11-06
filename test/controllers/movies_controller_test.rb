@@ -20,6 +20,7 @@ describe MoviesController do
         expect(movie).must_be_instance_of Hash
         expect(movie.keys.sort).must_equal ["id", "release_date", "title"]
       end
+      must_respond_with :ok
     end
     
     it "responds with an empty array when there are no movie" do
@@ -30,6 +31,7 @@ describe MoviesController do
       
       expect(body).must_be_instance_of Array
       expect(body).must_equal []
+      must_respond_with :ok
     end
   end
 end

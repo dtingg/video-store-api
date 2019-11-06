@@ -19,8 +19,8 @@ describe CustomersController do
       body.each do |customer|
         expect(customer).must_be_instance_of Hash
         expect(customer.keys.sort).must_equal ["id", "movies_checked_out_count", "name", "phone", "postal_code", "registered_at"]
-        # ADD movies_checked_out_count
       end
+      must_respond_with :ok
     end
     
     it "responds with an empty array when there are no customers" do
@@ -31,6 +31,7 @@ describe CustomersController do
       
       expect(body).must_be_instance_of Array
       expect(body).must_equal []
+      must_respond_with :ok
     end
   end
 end
