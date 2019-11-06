@@ -43,4 +43,20 @@ describe Rental do
       expect(bad_rental.errors.messages[:customer]).must_equal ["must exist"]
     end
   end
+  
+  describe "relationships" do
+    before do
+      @new_rental = Rental.create(customer: customer, movie: movie)
+    end
+    
+    it "can belong to a movie" do
+      expect(@new_rental.movie_id).must_equal movie.id
+      expect(@new_rental.movie).must_be_instance_of Movie
+    end
+    
+    it "can belong to a customer" do
+      expect(@new_rental.customer_id).must_equal customer.id
+      expect(@new_rental.customer).must_be_instance_of Customer
+    end
+  end
 end
