@@ -5,6 +5,6 @@ Rails.application.routes.draw do
   resources :customers, only: [:index]  
   resources :movies, only: [:index, :show, :create]
   
-  get "/rentals/check-out", to: "rentals#check_out", as: "check_out"
-  get "/rentals/check-in", to: "rentals#check_in", as: "check_in"
+  post "/rentals/check-out", to: "rentals#check_out", as: "check_out"
+  patch "/rentals/check-in", to: "rentals#check_in", as: "check_in"
 end

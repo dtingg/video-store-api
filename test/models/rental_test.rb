@@ -1,7 +1,7 @@
 require "test_helper"
 
 describe Rental do
-  let(:customer) { customers(:customer_one) }
+  let(:customer) { customers(:fred) }
   let(:movie) { movies(:matrix) }
   
   describe "validations" do

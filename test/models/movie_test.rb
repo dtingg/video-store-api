@@ -37,7 +37,7 @@ describe Movie do
   end
   
   describe "relationships" do
-    let(:customer) { customers(:customer_one) }
+    let(:customer) { customers(:fred) }
     let(:movie) { movies(:matrix) }
     it "can have a rental" do
       new_rental = Rental.create(customer: customer, movie: movie)
@@ -52,5 +52,15 @@ describe Movie do
       expect(movie.customers.count).must_equal 1
       expect(movie.customers.first).must_be_instance_of Customer
     end
-  end    
+  end  
+  
+  describe "find_available_inventory" do
+    it "sets the available inventory equal to the movie's inventory" do
+      movie = movies(:matrix)
+      
+      inventory = movie.inventory
+      
+      expect(movie.find_available_inventory).must_equal inventory
+    end
+  end
 end

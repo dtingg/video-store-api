@@ -49,7 +49,7 @@ describe Customer do
   end
   
   describe "relationships" do
-    let(:customer) { customers(:customer_one)}
+    let(:customer) { customers(:fred)}
     let(:movie) { movies(:matrix)}
     it "can have a rental" do
       new_rental = Rental.create(customer: customer, movie: movie)
