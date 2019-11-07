@@ -1,6 +1,8 @@
 class RentalsController < ApplicationController
   def check_out
     new_rental = Rental.new(rental_params)
+    new_rental.check_out_date = Date.today
+    new_rental.due_date = Date.today + 7
     
     if new_rental.save
       render json: {id: new_rental.id}, status: :ok

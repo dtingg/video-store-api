@@ -6,4 +6,9 @@ class Customer < ApplicationRecord
   
   has_many :rentals
   has_many :movies, through: :rentals
+  
+  def change_movies_checked_out_count
+    checked_out = self.rentals.where(:check_in_date == nil).count
+    return checked_out
+  end
 end
