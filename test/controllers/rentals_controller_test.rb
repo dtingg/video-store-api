@@ -5,19 +5,31 @@ describe RentalsController do
   let (:movie1) { movies(:matrix) }
   
   before do
-    @rental_hash = { customer: customer1, movie: movie1 }
+    @rental_hash = { customer_id: customer1.id, movie_id: movie1.id }
   end
   
-  describe "check-out" do
+  describe "check_out" do
     it "can check out a movie to a customer" do
       expect { post check_out_path, params: @rental_hash }.must_differ "Rental.count", 1
+      
+      body = check_response(expected_type: Hash)
       
       customer1.reload
       expect(customer1.rentals.count).must_equal 1
       expect(movie1.rentals.count).must_equal 1
+      expect(body.keys.first).must_equal "id"
+      expect(body.values.first).must_equal Rental.last.id
     end
     
     it "responds with bad_request and gives an error message if given invalid customer id" do
+      @rental_hash[:customer_id] = -1
+      
+      expect { post check_out_path, params: @rental_hash }.must_differ "Rental.count", 0
+      must_respond_with :bad_request
+      
+      customer1.reload
+      expect(customer1.rentals.count).must_equal 0
+      expect(movie1.rentals.count).must_equal 0
     end
     
     it "responds with bad_request and gives an error message if given invalid movie id" do
