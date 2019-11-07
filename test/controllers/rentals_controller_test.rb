@@ -51,6 +51,8 @@ describe RentalsController do
       
       post check_out_path, params: @rental_hash
       
+      customer1.reload
+      
       expect(customer1.movies_checked_out_count).must_equal 1
     end
     
