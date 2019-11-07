@@ -14,7 +14,6 @@ describe RentalsController do
       
       body = check_response(expected_type: Hash)
       
-      customer1.reload
       expect(customer1.rentals.count).must_equal 1
       expect(movie1.rentals.count).must_equal 1
       expect(body.keys.first).must_equal "id"
@@ -25,14 +24,24 @@ describe RentalsController do
       @rental_hash[:customer_id] = -1
       
       expect { post check_out_path, params: @rental_hash }.must_differ "Rental.count", 0
-      must_respond_with :bad_request
       
-      customer1.reload
-      expect(customer1.rentals.count).must_equal 0
+      body = check_response(expected_type: Hash, expected_status: :bad_request)
+      expect(body.keys).must_include "errors"
+      expect(body["errors"]["customer"]).must_equal ["must exist"]
+      
       expect(movie1.rentals.count).must_equal 0
     end
     
     it "responds with bad_request and gives an error message if given invalid movie id" do
+      @rental_hash[:movie_id] = -1
+      
+      expect { post check_out_path, params: @rental_hash }.must_differ "Rental.count", 0
+      
+      body = check_response(expected_type: Hash, expected_status: :bad_request)
+      expect(body.keys).must_include "errors"
+      expect(body["errors"]["movie"]).must_equal ["must exist"]
+      
+      expect(customer1.rentals.count).must_equal 0
     end    
     
     it "will increase a customer's movies_checked_out_count for a successful rental" do
