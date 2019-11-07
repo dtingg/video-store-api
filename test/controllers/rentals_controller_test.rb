@@ -23,9 +23,10 @@ describe RentalsController do
     it "responds with bad_request and gives an error message if given invalid customer id" do
       @rental_hash[:customer_id] = -1
       
-      expect { post check_out_path, params: @rental_hash }.must_differ "Rental.count", 0
+      expect { post check_out_path, params: @rental_hash }.wont_differ "Rental.count"
       
       body = check_response(expected_type: Hash, expected_status: :bad_request)
+      
       expect(body.keys).must_include "errors"
       expect(body["errors"]["customer"]).must_equal ["must exist"]
       
@@ -35,9 +36,10 @@ describe RentalsController do
     it "responds with bad_request and gives an error message if given invalid movie id" do
       @rental_hash[:movie_id] = -1
       
-      expect { post check_out_path, params: @rental_hash }.must_differ "Rental.count", 0
+      expect { post check_out_path, params: @rental_hash }.wont_differ "Rental.count"
       
       body = check_response(expected_type: Hash, expected_status: :bad_request)
+      
       expect(body.keys).must_include "errors"
       expect(body["errors"]["movie"]).must_equal ["must exist"]
       
@@ -45,20 +47,35 @@ describe RentalsController do
     end    
     
     it "will increase a customer's movies_checked_out_count for a successful rental" do
+      expect(customer1.movies_checked_out_count).must_equal 0
+      
+      post check_out_path, params: @rental_hash
+      
+      expect(customer1.movies_checked_out_count).must_equal 1
     end
     
     it "won't change a customer's movies_checked_out_count for an invalid rental" do
+      expect(customer1.movies_checked_out_count).must_equal 0
+      
+      @rental_hash[:movie_id] = -1
+      
+      post check_out_path, params: @rental_hash
+      
+      expect(customer1.movies_checked_out_count).must_equal 0
     end
     
     it "will decrease a movie's available_inventory for a successful rental" do
+      starting_inventory = movie1.available_inventory
       
+      expect{ post check_out_path, params: @rental_hash }.must_differ "starting_inventory", -1
     end
     
     it "won't change a movie's available_inventory for an invalid rental" do
-    end
-    
-    # Move to rental model method?
-    it "sets the check out date to today and sets the due date to a week from today" do
+      starting_inventory = movie1.available_inventory
+      
+      @rental_hash[:customer_id] = -1
+      
+      expect{ post check_out_path, params: @rental_hash }.wont_differ "starting_inventory"
     end
   end
   

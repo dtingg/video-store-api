@@ -54,13 +54,13 @@ describe Movie do
     end
   end  
   
-  describe "find_available_inventory" do
+  describe "available_inventory" do
     it "sets the available inventory equal to the movie's inventory" do
       movie = movies(:matrix)
       
       inventory = movie.inventory
       
-      expect(movie.find_available_inventory).must_equal inventory
+      expect(movie.available_inventory).must_equal inventory
     end
   end
 end
