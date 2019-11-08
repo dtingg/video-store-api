@@ -57,8 +57,9 @@ describe Movie do
   describe "available_inventory" do
     let(:customer) { customers(:fred) }
     let(:movie) { movies(:matrix) }
+    let(:movie2) { movies(:twilight) }
     it "sets the available inventory equal to the movie's inventory minus rented movies" do
-      movie = movies(:matrix)
+      
       inventory = movie.inventory
       
       new_rental = Rental.create(customer_id: customer.id, movie_id: movie.id)
@@ -70,6 +71,19 @@ describe Movie do
       new_rental2.save
       
       expect(movie.available_inventory).must_equal (inventory - 1)      
+    end
+    
+    it "returns the same value as the inventory if no copies of the movie are checked out" do
+      inventory = movie2.inventory
+      
+      expect(movie2.available_inventory).must_equal inventory
+    end
+    
+    it "returns 0 if all copies of the movie are checked out" do
+      inventory = movie2.inventory
+      new_rental = Rental.create(customer_id: customer.id, movie_id: movie2.id)
+      
+      expect(movie2.available_inventory).must_equal 0
     end
   end
 end
