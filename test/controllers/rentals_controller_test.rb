@@ -79,10 +79,35 @@ describe RentalsController do
       
       expect{ post check_out_path, params: @rental_hash }.wont_differ "starting_inventory"
     end
+    
+    it "won't check out a movie if there is no available inventory" do
+    end
   end
   
   describe "check-in" do
-    it "can check in a movie from a customer" do
+    before do
+      @new_rental = Rental.create(customer_id: customer1.id, movie_id: movie1.id)
+    end
+    
+    it "can check in a movie from a customer and decrease their movies_checked_out_count for a sucessful check_in" do
+      expect(customer1.movies_checked_out_count).must_equal 1
+      
+      expect { post check_in_path, params: @rental_hash }.wont_change "Rental.count"
+      
+      body = check_response(expected_type: Hash)
+      
+      expect(customer1.rentals.count).must_equal 1
+      expect(movie1.rentals.count).must_equal 1
+      expect(body.keys.first).must_equal "id"
+      expect(body.values.first).must_equal Rental.last.id
+      
+      expect(customer1.movies_checked_out_count).must_equal 0
+    end
+    
+    it "will increase a movie's available_inventory for a successful check_in" do
+      expect(movie1.available_inventory).must_equal 4
+      expect { post check_in_path, params: @rental_hash }.must_differ "movie1.available_inventory", 1
+      expect(movie1.available_inventory).must_equal 5
     end
     
     it "responds with bad_request and gives an error message if given invalid customer id" do
@@ -91,13 +116,7 @@ describe RentalsController do
     it "responds with bad_request and gives an error message if given invalid movie id" do
     end
     
-    it "will decrease a customer's movies_checked_out_count for a successful check_in" do
-    end
-    
     it "won't change a customer's movies_checked_out_count for an invalid check_in" do
-    end
-    
-    it "will increase a movie's available_inventory for a successful check_in" do
     end
     
     it "won't change a movie's available_inventory for an invalid check_in" do

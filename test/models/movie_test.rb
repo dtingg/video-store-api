@@ -55,12 +55,21 @@ describe Movie do
   end  
   
   describe "available_inventory" do
-    it "sets the available inventory equal to the movie's inventory" do
+    let(:customer) { customers(:fred) }
+    let(:movie) { movies(:matrix) }
+    it "sets the available inventory equal to the movie's inventory minus rented movies" do
       movie = movies(:matrix)
-      
       inventory = movie.inventory
       
-      expect(movie.available_inventory).must_equal inventory
+      new_rental = Rental.create(customer_id: customer.id, movie_id: movie.id)
+      new_rental2 = Rental.create(customer_id: customer.id, movie_id: movie.id)
+      
+      expect(movie.available_inventory).must_equal (inventory - 2)
+      
+      new_rental2.check_in_date = Date.today
+      new_rental2.save
+      
+      expect(movie.available_inventory).must_equal (inventory - 1)      
     end
   end
 end

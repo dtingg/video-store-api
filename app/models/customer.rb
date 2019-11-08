@@ -20,7 +20,7 @@ class Customer < ApplicationRecord
   end
   
   def movies_checked_out_count
-    checked_out = self.rentals.where(:check_in_date == nil).count
+    checked_out = self.rentals.where(check_in_date: nil).count
     return checked_out
   end
 end

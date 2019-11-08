@@ -13,9 +13,29 @@ class RentalsController < ApplicationController
     end  
   end
   
+  def check_in
+    matching_rentals = Rental.where(customer_id: params[:customer_id], movie_id: params[:movie_id])
+    rental = matching_rentals[0]
+    
+    rental.check_in_date = Date.today
+    
+    
+    if rental.save
+      # p rental[:check_in_date] == nil      
+      # checked_out = self.rentals.where(:check_in_date == nil).count
+      render json: {id: rental.id}, status: :ok
+      return
+    else
+      render json: {"errors": rental.errors.messages }, status: :bad_request
+      return
+    end
+  end
+  
   private
   
   def rental_params
     params.permit(:customer_id, :movie_id)
   end
 end
+
+# TEST MODEL METHODS
