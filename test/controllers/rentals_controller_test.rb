@@ -110,10 +110,21 @@ describe RentalsController do
       expect(movie1.available_inventory).must_equal 5
     end
     
-    it "responds with bad_request and gives an error message if given invalid customer id" do
+    it "responds with not_found and gives an error message if given invalid customer id" do
+      expect(customer1.movies_checked_out_count).must_equal 1
+      @rental_hash[:customer_id] = -1
+      
+      expect { post check_in_path, params: @rental_hash }.wont_differ "Rental.count"
+      
+      body = check_response(expected_type: Hash, expected_status: :not_found)
+      
+      expect(body.keys).must_include "errors"
+      expect(body["errors"]).must_equal "Rental not found"
+      
+      expect(customer1.movies_checked_out_count).must_equal 1
     end
     
-    it "responds with bad_request and gives an error message if given invalid movie id" do
+    it "responds with not_found and gives an error message if given invalid movie id" do
     end
     
     it "won't change a customer's movies_checked_out_count for an invalid check_in" do

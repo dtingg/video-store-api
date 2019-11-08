@@ -17,12 +17,14 @@ class RentalsController < ApplicationController
     matching_rentals = Rental.where(customer_id: params[:customer_id], movie_id: params[:movie_id])
     rental = matching_rentals[0]
     
+    if rental.nil?
+      render json: {"errors": "Rental not found" }, status: :not_found
+      return
+    end
+    
     rental.check_in_date = Date.today
     
-    
     if rental.save
-      # p rental[:check_in_date] == nil      
-      # checked_out = self.rentals.where(:check_in_date == nil).count
       render json: {id: rental.id}, status: :ok
       return
     else
