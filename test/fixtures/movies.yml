@@ -2,4 +2,9 @@ matrix:
   title: The Matrix
   release_date: March 31, 1999
   inventory: 5
-  overview: Science fiction action film.
+  overview: Science fiction action film
+twilight:
+  title: Twilight
+  release_date: November 21, 2008
+  inventory: 1
+  overview: Vampire love story

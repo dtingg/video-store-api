@@ -7,6 +7,13 @@ class Customer < ApplicationRecord
   has_many :rentals
   has_many :movies, through: :rentals
   
+  def movies_checked_out_count
+    checked_out = self.rentals.where(check_in_date: nil).count
+    return checked_out
+  end
+  
+  private 
+  
   def self.update_customer_json
     customers = Customer.all
     
@@ -17,10 +24,5 @@ class Customer < ApplicationRecord
     end
     
     return customer_json
-  end
-  
-  def movies_checked_out_count
-    checked_out = self.rentals.where(check_in_date: nil).count
-    return checked_out
   end
 end

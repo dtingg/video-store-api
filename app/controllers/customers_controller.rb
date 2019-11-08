@@ -1,8 +1,4 @@
-class CustomersController < ApplicationController
-  def zomg
-    render json: { test: "it works!" }, status: :ok
-  end
-  
+class CustomersController < ApplicationController  
   def index
     customer_json = Customer.update_customer_json
     

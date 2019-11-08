@@ -39,13 +39,6 @@ describe Customer do
       expect(customer.errors.messages).must_include :phone
       expect(customer.errors.messages[:phone]).must_equal ["can't be blank"]
     end
-    
-    it "gets a default value of 0 for movies_checked_out_count" do
-      customer = Customer.new(name: "Fred Flintstone", registered_at: DateTime.now, postal_code: "98104", phone: "1234567890")
-      
-      expect(customer.valid?).must_equal true
-      expect(customer.movies_checked_out_count).must_equal 0
-    end
   end
   
   describe "relationships" do
