@@ -44,6 +44,7 @@ describe Customer do
   describe "relationships" do
     let(:customer) { customers(:fred)}
     let(:movie) { movies(:matrix)}
+    
     it "can have a rental" do
       new_rental = Rental.create(customer: customer, movie: movie)
       
@@ -58,4 +59,39 @@ describe Customer do
       expect(customer.movies.first).must_be_instance_of Movie
     end
   end  
+  
+  describe "movies_checked_out_count" do
+    let(:customer) { customers(:fred)}
+    let(:movie) { movies(:matrix)}
+    let(:rental) { Rental.create(customer_id: customer.id, movie_id: movie.id) }
+    
+    it "returns 0 if the customer doesn't have any movies checked out" do
+      customer_rentals = Rental.where(customer_id: customer.id, check_in_date: nil)
+      
+      expect(customer_rentals).must_equal []
+      expect(customer.movies_checked_out_count).must_equal 0
+    end
+    
+    it "returns the appropriate number if the customer has a movie checked out" do
+      rental.save
+      
+      customer_rentals = Rental.where(customer_id: customer.id, check_in_date: nil)
+      expect(customer_rentals.length).must_equal 1
+      expect(customer.movies_checked_out_count).must_equal 1
+    end
+    
+    it "won't count movies that have been checked in" do
+      rental.save
+      customer_rentals = Rental.where(customer_id: customer.id, check_in_date: nil)
+      expect(customer_rentals.count).must_equal 1
+      expect(customer.movies_checked_out_count).must_equal 1
+      
+      rental.check_in_date = Date.today
+      rental.save
+      
+      updated_customer_rentals = Rental.where(customer_id: customer.id, check_in_date: nil)
+      expect(updated_customer_rentals).must_equal []
+      expect(customer.movies_checked_out_count).must_equal 0
+    end
+  end
 end

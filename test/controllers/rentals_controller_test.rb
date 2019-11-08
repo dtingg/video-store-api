@@ -146,5 +146,17 @@ describe RentalsController do
       expect(body.keys).must_include "errors"
       expect(body["errors"]).must_equal "Rental not found"
     end
+    
+    it "responds with not_found, gives an error message, and doesn't change the customer's movies_checked_out_count if no rentals found" do
+      @new_rental.check_in_date = Date.today
+      @new_rental.save
+      
+      expect { post check_in_path, params: @rental_hash }.wont_differ "customer1.movies_checked_out_count"
+      
+      body = check_response(expected_type: Hash, expected_status: :not_found)
+      
+      expect(body.keys).must_include "errors"
+      expect(body["errors"]).must_equal "Rental not found"  
+    end
   end
 end
