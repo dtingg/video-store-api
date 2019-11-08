@@ -12,7 +12,7 @@ class Customer < ApplicationRecord
     return checked_out
   end
   
-  private 
+  private
   
   def self.update_customer_json
     customers = Customer.all

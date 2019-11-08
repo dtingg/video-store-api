@@ -87,11 +87,8 @@ describe RentalsController do
       expect(movie2.available_inventory).must_equal 0
       expect(customer1.movies_checked_out_count).must_equal 1
       
-      
-      expect{ another_rental = Rental.create(customer: customer1, movie: movie2) }.wont_differ "Rental.count"
-      
-      
-      
+      @rental_hash2 = { customer_id: customer1.id, movie_id: movie2.id }      
+      expect{ post check_out_path, params: @rental_hash2 }.wont_differ "Rental.count"
       
       expect(customer1.movies_checked_out_count).must_equal 1
       
