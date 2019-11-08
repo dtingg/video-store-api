@@ -8,6 +8,7 @@ class Movie < ApplicationRecord
   has_many :customers, through: :rentals
   
   def available_inventory
-    return self.inventory
+    checked_out = self.rentals.where(:check_in_date == nil).count
+    return self.inventory - checked_out
   end
 end

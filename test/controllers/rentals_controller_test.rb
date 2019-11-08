@@ -65,9 +65,11 @@ describe RentalsController do
     end
     
     it "will decrease a movie's available_inventory for a successful rental" do
-      starting_inventory = movie1.available_inventory
+      expect(movie1.available_inventory).must_equal 5
       
-      expect{ post check_out_path, params: @rental_hash }.must_differ "starting_inventory", -1
+      expect{ post check_out_path, params: @rental_hash }.must_differ "movie1.available_inventory", -1
+      
+      expect(movie1.available_inventory).must_equal 4
     end
     
     it "won't change a movie's available_inventory for an invalid rental" do
