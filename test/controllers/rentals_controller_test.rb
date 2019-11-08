@@ -105,6 +105,16 @@ describe RentalsController do
       expect(body.keys).must_include "errors"
       expect(body["errors"]).must_equal "No available inventory"
     end
+    
+    it "responds with bad_request and gives an error message if not given any parameters" do
+      expect { post check_out_path }.wont_differ "Rental.count"
+      
+      body = check_response(expected_type: Hash, expected_status: :bad_request)
+      
+      expect(body.keys).must_include "errors"
+      expect(body["errors"]["movie"]).must_equal ["must exist"]
+      expect(body["errors"]["customer"]).must_equal ["must exist"]
+    end   
   end
   
   describe "check-in" do
@@ -184,5 +194,14 @@ describe RentalsController do
       expect(body.keys).must_include "errors"
       expect(body["errors"]).must_equal "Rental not found"  
     end
+    
+    it "responds with not_found and gives an error message if not given any parameters" do
+      expect { post check_in_path }.wont_differ "Rental.count"
+      
+      body = check_response(expected_type: Hash, expected_status: :not_found)
+      
+      expect(body.keys).must_include "errors"
+      expect(body["errors"]).must_equal "Rental not found"
+    end   
   end
 end

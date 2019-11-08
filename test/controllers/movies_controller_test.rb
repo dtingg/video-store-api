@@ -56,48 +56,59 @@ describe MoviesController do
   describe "create" do
     before do
       @movie_hash = {
-      title: "Twilight",
-      overview: "Vampire love story",
-      release_date: "2008-11-21",
-      inventory: 100 }
-    end
-    
-    it "responds with status created when given a valid request and gives back id as a key" do
-      expect{post movies_path, params: @movie_hash}.must_differ "Movie.count", 1
-      body = check_response(expected_type: Hash, expected_status: :ok)
-      expect(body.keys).must_equal ['id']
-    end
-    
-    it "responds with bad_request when request has no title" do
-      @movie_hash[:title] = nil
+        title: "Twilight",
+        overview: "Vampire love story",
+        release_date: "2008-11-21",
+        inventory: 100 }
+      end
       
-      expect{post movies_path, params: @movie_hash}.wont_change "Movie.count"
-      body = check_response(expected_type: Hash, expected_status: :bad_request)
-      expect(body['errors'].keys).must_include 'title'
-    end
-    
-    it "responds with bad_request when request has no overview" do
-      @movie_hash[:overview] = nil
+      it "responds with status created when given a valid request and gives back id as a key" do
+        expect{post movies_path, params: @movie_hash}.must_differ "Movie.count", 1
+        body = check_response(expected_type: Hash, expected_status: :ok)
+        expect(body.keys).must_equal ['id']
+      end
       
-      expect{post movies_path, params: @movie_hash}.wont_change "Movie.count"
-      body = check_response(expected_type: Hash, expected_status: :bad_request)
-      expect(body['errors'].keys).must_include 'overview'
-    end
-    
-    it "responds with bad_request when request has no release_date" do
-      @movie_hash[:release_date] = nil
+      it "responds with bad_request when request is not given parameters" do
+        expect{post movies_path}.wont_change "Movie.count"
+        body = check_response(expected_type: Hash, expected_status: :bad_request)
+        
+        expect(body['errors']['title']).must_equal ["can't be blank"]
+        expect(body['errors']['overview']).must_equal ["can't be blank"]
+        expect(body['errors']['release_date']).must_equal ["can't be blank"]
+        expect(body['errors']['inventory']).must_equal ["can't be blank"]
+      end
       
-      expect{post movies_path, params: @movie_hash}.wont_change "Movie.count"
-      body = check_response(expected_type: Hash, expected_status: :bad_request)
-      expect(body['errors'].keys).must_include 'release_date'
-    end
-    
-    it "responds with bad_request when request has no inventory" do
-      @movie_hash[:inventory] = nil
+      it "responds with bad_request when request has no title" do
+        @movie_hash[:title] = nil
+        
+        expect{post movies_path, params: @movie_hash}.wont_change "Movie.count"
+        body = check_response(expected_type: Hash, expected_status: :bad_request)
+        expect(body['errors'].keys).must_include 'title'
+      end
       
-      expect{post movies_path, params: @movie_hash}.wont_change "Movie.count"
-      body = check_response(expected_type: Hash, expected_status: :bad_request)
-      expect(body['errors'].keys).must_include 'inventory'
+      it "responds with bad_request when request has no overview" do
+        @movie_hash[:overview] = nil
+        
+        expect{post movies_path, params: @movie_hash}.wont_change "Movie.count"
+        body = check_response(expected_type: Hash, expected_status: :bad_request)
+        expect(body['errors'].keys).must_include 'overview'
+      end
+      
+      it "responds with bad_request when request has no release_date" do
+        @movie_hash[:release_date] = nil
+        
+        expect{post movies_path, params: @movie_hash}.wont_change "Movie.count"
+        body = check_response(expected_type: Hash, expected_status: :bad_request)
+        expect(body['errors'].keys).must_include 'release_date'
+      end
+      
+      it "responds with bad_request when request has no inventory" do
+        @movie_hash[:inventory] = nil
+        
+        expect{post movies_path, params: @movie_hash}.wont_change "Movie.count"
+        body = check_response(expected_type: Hash, expected_status: :bad_request)
+        expect(body['errors'].keys).must_include 'inventory'
+      end
     end
   end
-end
+  
