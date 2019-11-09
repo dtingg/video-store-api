@@ -59,7 +59,6 @@ describe Movie do
     let(:movie) { movies(:matrix) }
     let(:movie2) { movies(:twilight) }
     it "sets the available inventory equal to the movie's inventory minus rented movies" do
-      
       inventory = movie.inventory
       
       new_rental = Rental.create(customer_id: customer.id, movie_id: movie.id)

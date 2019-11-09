@@ -41,5 +41,28 @@ describe CustomersController do
         expect(customer.keys.sort).must_equal ["id", "movies_checked_out_count", "name", "phone", "postal_code", "registered_at"]
       end
     end
+    
+    it "responds with JSON and success for sorting by name with number of responses and pages even if there aren't enough records" do
+      expect(Customer.all.count).must_equal 16
+      
+      get customers_path, params: {sort: "name", n: 10, p: 2}
+      
+      body = check_response(expected_type: Array)
+      
+      expect(body.count).must_equal 6
+      body.each do |customer|
+        expect(customer).must_be_instance_of Hash
+        expect(customer.keys.sort).must_equal ["id", "movies_checked_out_count", "name", "phone", "postal_code", "registered_at"]
+      end
+    end
+    
+    it "responds with JSON and success for sorting by name with number of responses and pages even if there aren't enough records" do
+      expect(Customer.all.count).must_equal 16
+      
+      get customers_path, params: {sort: "name", n: 10, p: 3}
+      
+      body = check_response(expected_type: Hash, expected_status: :bad_request)
+      expect(body['errors']["customer"]).must_equal ["Not enough customers"]
+    end
   end
 end

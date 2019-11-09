@@ -17,6 +17,11 @@ class CustomersController < ApplicationController
       customer_json = customer_json[starting..ending]
     end
     
+    if !customer_json
+      render json: {"errors": { "customer": ["Not enough customers"] } }, status: :bad_request    
+      return
+    end
+    
     render json: customer_json, status: :ok  
   end
 end
