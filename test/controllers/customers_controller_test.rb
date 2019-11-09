@@ -31,6 +31,8 @@ describe CustomersController do
     end
     
     it "responds with JSON and success for sorting by name with number of responses and pages" do
+      expect(Customer.all.count).must_equal 16
+      
       get customers_path, params: {sort: "name", n: 5, p: 2}
       
       body = check_response(expected_type: Array)
